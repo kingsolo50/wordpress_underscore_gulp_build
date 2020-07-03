@@ -1,0 +1,74 @@
+
+  .navbar {
+
+    // font-family: Montserrat, sans-serif;
+    font-family: Raleway,sans-serif;
+    margin-bottom: 0;
+    background-color: white !important;
+    border: 0;
+    font-size: 11px !important;
+    letter-spacing: 4px;
+    opacity: 0.9;
+      
+  }
+  
+  .navbar-brand {
+    width: 5em;
+  }
+    
+  .navbar-dark .navbar-nav .nav-link {
+    color: #333;
+    font-size: 1.1em;
+  }
+  
+  .bg-dark {
+      background-color: white !important;
+  }
+
+  .nav-link {
+    .active {
+      color: blue !important;
+    }
+  }
+
+  blockquote {
+    .slogan {
+      font-family: 'Yellowtail', cursive;
+      font-size: 40px;
+    }
+  }
+
+  h5 {
+    font-weight: bolder;
+  }
+  
+  // Extra small devices (portrait phones, less than 576px)
+  // No media query for `xs` since this is the default in Bootstrap
+  
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 0px) { 
+  
+    .navbar-dark .navbar-toggler {
+      border-color: transparent;
+    }
+  
+    .navbar-toggler-icon {
+      background-image: url('https://img.icons8.com/android/2x/menu.png');  
+    }
+    
+  }
+  
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) { 
+  
+   }
+  
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) { 
+  
+   }
+  
+  // Extra large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) { 
+  
+   }

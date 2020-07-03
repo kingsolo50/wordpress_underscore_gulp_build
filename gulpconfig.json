@@ -1,0 +1,24 @@
+{
+	"browserSyncOptions": {
+		"proxy": "localhost/cmc_2020/wordpress",
+		"notify": false,
+		"files": ["./**/*.scss", "./**/*.js", "./**/*.php"]
+	},
+	"paths": {
+		"js": ".",
+		"css": ".",
+		"fonts": "./fonts",
+		"img": "./assets/img",
+		"imgsrc": "./assets/img",
+		"sass": "./sass",
+		"node": "./node_modules",
+		"composer": "./vendor",
+        "dev": "./src",
+        "assets": "./assets",
+		"dist": "./dist",
+		"distprod": "./dist-product",
+		"host": "HOST FTP ADDRESS",
+		"user": "USERNAME",
+		"password": "PASSWORD"
+	}
+}

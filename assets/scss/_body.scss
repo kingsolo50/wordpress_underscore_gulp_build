@@ -1,0 +1,39 @@
+
+.card {
+    .card-img-top {
+       border-radius: 0 !important;
+    }
+}
+
+// Extra small devices (portrait phones, less than 576px)
+// No media query for `xs` since this is the default in Bootstrap
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { 
+
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { 
+
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { 
+    .carousel-inner { height: 100vh; }
+
+    .carousel-caption { top: 40%; }
+
+    .carousel-indicators { top: 80%; }
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { 
+    .carousel-inner { height: 100vh; }
+
+    .carousel-caption { top: 40%; }
+    
+    .carousel-indicators { top: 80%; }
+    
+}
