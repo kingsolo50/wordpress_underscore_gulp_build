@@ -1,59 +1,92 @@
+require('dotenv').config();
+
 const gulp = require( 'gulp' ); 
+const { dest, src, watch, series, parallel } = require('gulp');
 const plumber = require( 'gulp-plumber' );
+const cssnano = require('gulp-cssnano');
 const sass = require( 'gulp-sass' );
 const postcss = require( 'gulp-postcss' );
 const rename = require( 'gulp-rename' );
+const gulpCopy = require('gulp-copy');
 const concat = require( 'gulp-concat' );
 const uglify = require( 'gulp-uglify' );
 const pipeline = require('readable-stream').pipeline;
 const imagemin = require( 'gulp-imagemin' );
 const sourcemaps = require( 'gulp-sourcemaps' );
 const browserSync = require( 'browser-sync' ).create();
+const server = browserSync;
 const del = require( 'del' );
 const cleanCSS = require( 'gulp-clean-css' );
 const autoprefixer = require( 'autoprefixer' );
 const gutil = require( 'gulp-util' );
 const ftp = require( 'vinyl-ftp' );
 
+
 // Configuration file to keep your code DRY
 const cfg = require( './gulpconfig.json' );
 const paths = cfg.paths;
 
-//SCSS COMPILE TO CSS
+// /* --------------------------------- DEPLOY --------------------------------- */
+// gulp.task( 'deploy', function () {
+ 	
+//  	let uploadDir = process.env.FTPDIR;
 
-gulp.task( 'sass', function() {
+//     var conn = ftp.create( {
+//         host:     process.env.FTPHOSTNAME,
+//         user:     process.env.FTPUSERNAME,
+//         password: process.env.FTPPASSWORD,
+//         parallel: 10,
+//         log:      gutil.log
+//     } );
+ 
+//     var globs = paths.distprod;
+ 
+//     // using base = '.' will transfer everything to /public_html correctly
+//     // turn off buffering in gulp.src for best performance
+	
+// 	gulp.series([ 'distprod' ], function() {
+// 		return gulp.src( globs, { base: '.', buffer: false } )
+// 			.pipe( conn.newer( uploadDir ) ) // only upload newer files
+// 			.pipe( conn.dest( uploadDir ) );
+// 	});
+ 
+// } );
+
+//scss2css
+function sassTask() {
+	
 	return gulp
 		.src( './assets/scss/styles.scss' )
-		.pipe(
-			plumber( {
+		.pipe(	plumber(
+			{
 				errorHandler( err ) {
 					console.log( err );
 					this.emit( 'end' );
 				},
-			} )
+			})
 		)
-		.pipe( sourcemaps.init( { loadMaps: true } ) )
-		.pipe( sass( { errLogToConsole: true } ) )
-		.pipe( postcss( [ autoprefixer() ] ) )
-        .pipe( sourcemaps.write( undefined, { sourceRoot: '.' } ) )
-        .pipe( rename("style.css") )
-		.pipe( gulp.dest( paths.css ) );
-} );
+		.pipe( 	sourcemaps.init( { loadMaps: true } ) )
+		.pipe( 	sass( { errLogToConsole: true } ) )
+		.pipe( 	postcss( [ autoprefixer() ] ) )
+		.pipe( 	cssnano() )
+        .pipe( 	sourcemaps.write( undefined, { sourceRoot: '.' } ) )
+        .pipe( 	rename("style.css") )
+		.pipe( 	gulp.dest( paths.css ) );
+}
 
-gulp.task( 'scripts', function() {
-	var scripts = './assets/js/scripts/*.js';
-		
+//concat&minifyJSfiles
+function jsTask() {
+	let scripts = './assets/js/*.js';
 	return gulp
 		.src( scripts, { allowEmpty: true } )		
-		.pipe( concat( 'scripts.min.js' ) )
-		.pipe( uglify() )
-		.pipe( gulp.dest( './js' ) );
+		.pipe( concat( 'scripts.min.js' ))
+		.pipe( uglify())
+		.pipe( gulp.dest( paths.js ) );
+}
 
-} );
-
-/* -------------------------------- IMAGEMIN -------------------------------- */
-gulp.task( 'imagemin', () => 
-	gulp.src( paths.imgsrc + '/**' )
+//minifyImages
+function imageTask() {
+	gulp.src( paths.imgSrc + '/**' )
 		.pipe(
 			imagemin(
 				[
@@ -74,40 +107,67 @@ gulp.task( 'imagemin', () =>
 				}
 			)
 		)
-		.pipe( gulp.dest( paths.img ) )
-);
+		.pipe( gulp.dest( paths.imgSrc ) )
+}
 
-/* -------------------------------------------------------------------------- */
-/*                                 browserSync                                */
-/* -------------------------------------------------------------------------- */
-gulp.task( 'browser-sync', function() {
-	browserSync.init( cfg.browserSyncOptions );
-} );
+//cleanDistFolder
+function cleanProdTask() {
 
-/* --------------------------------- DEPLOY --------------------------------- */
-gulp.task( 'deploy', function () {
- 
-    var conn = ftp.create( {
-        host:     paths.host,
-        user:     paths.user,
-        password: paths.password,
-        parallel: 10,
-        log:      gutil.log
-    } );
- 
-    var globs = paths.distprod;
- 
-    // using base = '.' will transfer everything to /public_html correctly
-    // turn off buffering in gulp.src for best performance
+	return del([paths.distprod]);
+}
+
+//copyFiles
+function copyTask() {
+
+		let srcFiles = 	[	
+						'*.php', 
+						'./inc', 
+						'./js',
+						'./pages',
+						'./template-parts',
+						'./languages',
+						'./assets',
+						'./*.css',
+						'./*png' ];
+
+		let dist = paths.distprod;
+
+		// Copy all folders and .php file
+		return src(srcFiles).pipe(plumber()).pipe(dest(dist))
+}
+
+//browserSync
+function bsTask() {
+	return browserSync.init( cfg.browserSyncOptions );
+}
+
+//refresh browser Sync
+function reload() {
+	browserSync.reload();
+}
+
+//deployTask
+function deployTask() {
+}
+
 	
-	gulp.series([ 'dist-product' ], function() {
-		return gulp.src( globs, { base: '.', buffer: false } )
-			.pipe( conn.newer( '/public_html' ) ) // only upload newer files
-			.pipe( conn.dest( '/public_html' ) );
-	});
- 
-} );
+//
+exports.bs = bsTask;
+//
+exports.sass 	= sassTask;
+//
+exports.images 	= imageTask;
+//
+exports.copy = series(cleanProdTask, copyTask);
+//
+exports.build 	= series( parallel(sassTask, jsTask), imageTask, cleanProdTask, copyTask, deployTask);
 
-gulp.task( 'default', gulp.series( 'sass' ) );
-// gulp.task( 'compile', gulp.series( 'styles', 'scripts', 'dist' ) );
+// exports.default = series(sassTask, jsTask);
+exports.default = function() {
+
+	watch([ './assets/scss/*.scss' ], series(sassTask, bsTask))
+	
+};
+
+
 

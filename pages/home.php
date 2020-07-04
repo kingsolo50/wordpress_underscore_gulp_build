@@ -42,19 +42,19 @@
     </div>
   </div>
   <div class="container">
-
     <div class="row">
       <div class="col-12 mt-3">
-        <!-- <h2><?php echo $homepage_title; ?></h2> -->
+        <!-- OUR MISSION -->
         <h1 class="mt-3">
-          <blockquote class="blockquote">
-              <footer class="blockquote-footer"><i>Our Mission</i></footer>
-            <p class="mb-0 slogan"><?php echo $homepage_slogan; ?></p>
+          <blockquote class="blockquote slogan">
+            <footer class="blockquote-footer"><i>Our Mission</i></footer>
+            <h1 class="mb-0"><?php echo $homepage_slogan; ?></h1>
           </blockquote>
         </h1>
       </div>
       <div class="col-12 mt-3">
         <div class="card-deck">
+          <!-- ABOUT US -->
           <div class="card" style="border-radius: 0;">
             <img src="<?php echo $card_1_image; ?>" class="pt-3 pl-3 pr-3 card-img-top rounded-circle" alt="...">
             <div class="card-body">
@@ -66,17 +66,17 @@
               <p class="card-text"><?php echo $card_1_text; ?></p>             
             </div>            
           </div>
+          <!-- OUR VISION -->
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"><?php echo $card_2_title; ?></h5>
               <blockquote class="blockquote">
                 <p class="mb-0"><?php echo $card_2_text; ?></p>
                 <footer class="blockquote-footer">Our vision</footer>
-              </blockquote>
-                                      
+              </blockquote>                                    
             </div>
-            <!-- <img src="https://images.pexels.com/photos/636010/pexels-photo-636010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="card-img-top" alt="..."> -->            
           </div>
+          <!-- OUR HISTORY -->
           <div class="card">
             <img src="<?php echo $card_3_image; ?>" class="card-img-top img-fluid" alt="...">
             <div class="card-body">

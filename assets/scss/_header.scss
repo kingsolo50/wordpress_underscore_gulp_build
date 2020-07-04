@@ -32,10 +32,13 @@
   }
 
   blockquote {
-    .slogan {
+    h1 {
+      text-align: center;
       font-family: 'Yellowtail', cursive;
-      font-size: 40px;
     }
+    p { 
+        font-size: 1rem !important;         
+      }
   }
 
   h5 {
