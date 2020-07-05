@@ -5,15 +5,16 @@
 		"files": ["./**/*.scss", "./**/*.js", "./**/*.php"]
 	},
 	"paths": {
-		"js": "./js",
 		"css": ".",
+		"js": "./js",
 		"imgSrc": "./assets/img",		
 		"sass": "./sass",
 		"scss": "./assets/scss",
 		"distprod": "./dist-product",
-		"host": "HOST FTP ADDRESS",
-		"user": "USERNAME",
-		"password": "PASSWORD",
+		"productionFiles": "dist-product/**/*",
+		"host": "cp164173.hpdns.net",
+		"user": "cmcmuk",
+		"password": "v96UU!3Xz8Mqo-",
 		"hostDir": "/public_html/wp-content/themes/cmcm_2020_v1"
 	}
 }

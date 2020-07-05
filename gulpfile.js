@@ -14,7 +14,6 @@ const pipeline = require('readable-stream').pipeline;
 const imagemin = require( 'gulp-imagemin' );
 const sourcemaps = require( 'gulp-sourcemaps' );
 const browserSync = require( 'browser-sync' ).create();
-const server = browserSync;
 const del = require( 'del' );
 const cleanCSS = require( 'gulp-clean-css' );
 const autoprefixer = require( 'autoprefixer' );
@@ -26,52 +25,25 @@ const ftp = require( 'vinyl-ftp' );
 const cfg = require( './gulpconfig.json' );
 const paths = cfg.paths;
 
-// /* --------------------------------- DEPLOY --------------------------------- */
-// gulp.task( 'deploy', function () {
- 	
-//  	let uploadDir = process.env.FTPDIR;
-
-//     var conn = ftp.create( {
-//         host:     process.env.FTPHOSTNAME,
-//         user:     process.env.FTPUSERNAME,
-//         password: process.env.FTPPASSWORD,
-//         parallel: 10,
-//         log:      gutil.log
-//     } );
- 
-//     var globs = paths.distprod;
- 
-//     // using base = '.' will transfer everything to /public_html correctly
-//     // turn off buffering in gulp.src for best performance
-	
-// 	gulp.series([ 'distprod' ], function() {
-// 		return gulp.src( globs, { base: '.', buffer: false } )
-// 			.pipe( conn.newer( uploadDir ) ) // only upload newer files
-// 			.pipe( conn.dest( uploadDir ) );
-// 	});
- 
-// } );
-
 //scss2css
 function sassTask() {
 	
-	return gulp
-		.src( './assets/scss/styles.scss' )
-		.pipe(	plumber(
-			{
-				errorHandler( err ) {
-					console.log( err );
-					this.emit( 'end' );
-				},
-			})
-		)
-		.pipe( 	sourcemaps.init( { loadMaps: true } ) )
-		.pipe( 	sass( { errLogToConsole: true } ) )
-		.pipe( 	postcss( [ autoprefixer() ] ) )
-		.pipe( 	cssnano() )
-        .pipe( 	sourcemaps.write( undefined, { sourceRoot: '.' } ) )
-        .pipe( 	rename("style.css") )
-		.pipe( 	gulp.dest( paths.css ) );
+	return 	src( './assets/scss/styles.scss' )
+			.pipe(	plumber(
+				{
+					errorHandler( err ) {
+						console.log( err );
+						this.emit( 'end' );
+					},
+				})
+			)
+			.pipe( 	sourcemaps.init( { loadMaps: true } ) )
+			.pipe( 	sass( { errLogToConsole: true } ) )
+			.pipe( 	postcss( [ autoprefixer() ] ) )
+			.pipe( 	cssnano() )
+	        .pipe( 	sourcemaps.write( undefined, { sourceRoot: '.' } ) )
+	        .pipe( 	rename("style.css") )
+			.pipe( 	dest( paths.css ) );
 }
 
 //concat&minifyJSfiles
@@ -86,8 +58,8 @@ function jsTask() {
 
 //minifyImages
 function imageTask() {
-	gulp.src( paths.imgSrc + '/**' )
-		.pipe(
+	return src( paths.imgSrc + '/**' )
+			.pipe(
 			imagemin(
 				[
 					// Bundled plugins
@@ -107,33 +79,34 @@ function imageTask() {
 				}
 			)
 		)
-		.pipe( gulp.dest( paths.imgSrc ) )
+		.pipe( dest( paths.imgSrc ));
 }
 
 //cleanDistFolder
 function cleanProdTask() {
-
 	return del([paths.distprod]);
 }
 
 //copyFiles
 function copyTask() {
 
-		let srcFiles = 	[	
+		const srcFiles = 	[	
+						'inc/**', 
+						'js/**',
+						'pages/**',
+						'template-parts/**',
+						'languages/**',
+						'assets/**',
+						'*.css',
 						'*.php', 
-						'./inc', 
-						'./js',
-						'./pages',
-						'./template-parts',
-						'./languages',
-						'./assets',
-						'./*.css',
-						'./*png' ];
+						'./*.png' ];
 
-		let dist = paths.distprod;
+		const dist = paths.distprod;
 
 		// Copy all folders and .php file
-		return src(srcFiles).pipe(plumber()).pipe(dest(dist))
+		return src(srcFiles, { base: './'}).
+		pipe(plumber()).
+		pipe(dest(dist));
 }
 
 //browserSync
@@ -148,26 +121,45 @@ function reload() {
 
 //deployTask
 function deployTask() {
+
+	const uploadDir = paths.hostDir;
+	const conn = ftp.create( {
+	    host:     paths.host,
+	    user:     paths.user,
+	    password: paths.password,
+	    parallel: 10,
+	    log:      gutil.log
+    });
+
+    var siteFiles = paths.productionFiles;
+
+    // using base = '.' will transfer everything to /public_html correctly
+    // turn off buffering in gulp.src for best performance
+
+    return 	src( siteFiles, { buffer: true }).
+    		pipe( plumber()).
+    		pipe( conn.newer ( uploadDir )).
+    		pipe( conn.dest( uploadDir ));
 }
+//
 
-	
-//
-exports.bs = bsTask;
-//
-exports.sass 	= sassTask;
-//
-exports.images 	= imageTask;
-//
-exports.copy = series(cleanProdTask, copyTask);
-//
-exports.build 	= series( parallel(sassTask, jsTask), imageTask, cleanProdTask, copyTask, deployTask);
 
+//
+exports.bs 			= bsTask;
+//
+exports.sass 		= sassTask;
+//
+exports.images 		= imageTask;
+//
+exports.copy 		= copyTask;
+//
+exports.deploy 		= deployTask;
+//
+exports.build 		= series( sassTask, jsTask, imageTask, cleanProdTask, copyTask, deployTask);
+exports.quickBuild 	= series( sassTask, jsTask, cleanProdTask, copyTask, deployTask);
+//
+exports.default = function() { watch([ './assets/scss/*.scss' ], series(sassTask, bsTask))};
 // exports.default = series(sassTask, jsTask);
-exports.default = function() {
-
-	watch([ './assets/scss/*.scss' ], series(sassTask, bsTask))
-	
-};
 
 
 
