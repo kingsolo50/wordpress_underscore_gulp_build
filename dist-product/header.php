@@ -58,20 +58,6 @@
 						</button>
 
 						<?php
-						/*
-							wp_nav_menu ( array (
-								'theme_location' 	=> 'primary',
-								'depth'				=> 2,
-								'container' 		=> 'div',
-								'container_class' 	=> 'collapse navbar-collapse',
-								'container_id' 		=> 'collapsibleNavbar',
-								'menu_class' 		=> 'navbar-nav ml-auto',
-								'menu_id' 			=> 'collapsibleNavbar',
-							) );				
-						*/
-						?>
-
-						<?php
 							wp_nav_menu(array(
 								'theme_location' 	=> 'primary',
 								'menu'           	=> 'main-menu',
@@ -82,7 +68,6 @@
 								'container_id' 		=> 'collapsibleNavbar',
 								'menu_class'     	=> 'navbar-nav ml-auto',
 								'menu_id' 			=> 'collapsibleNavbar',
-								//Process nav menu using our custom nav walker
 								'walker'         	=> new wp_bootstrap_navwalker()
 							));		
 						?>

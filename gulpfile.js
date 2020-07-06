@@ -108,6 +108,17 @@ function copyTask() {
 		pipe(plumber()).
 		pipe(dest(dist));
 }
+//miniCopy
+function miniCopyTask() {
+
+		const dist = paths.distprod;
+		const srcFiles = [ 'js/**', '*.css', '*.php' ];
+
+		// Copy all folders and .php file
+		return src(srcFiles, { base: './'}).
+		pipe(plumber()).
+		pipe(dest(dist));
+}
 
 //browserSync
 function bsTask() {
@@ -136,30 +147,32 @@ function deployTask() {
     // using base = '.' will transfer everything to /public_html correctly
     // turn off buffering in gulp.src for best performance
 
-    return 	src( siteFiles, { buffer: true }).
+    return 	src( siteFiles, { buffer: false }).
     		pipe( plumber()).
     		pipe( conn.newer ( uploadDir )).
     		pipe( conn.dest( uploadDir ));
 }
-//
 
 
-//
+/**/
 exports.bs 			= bsTask;
-//
+/**/
 exports.sass 		= sassTask;
-//
+/**/
 exports.images 		= imageTask;
-//
+/**/
 exports.copy 		= copyTask;
-//
+/**/
 exports.deploy 		= deployTask;
-//
+/**/
 exports.build 		= series( sassTask, jsTask, imageTask, cleanProdTask, copyTask, deployTask);
-exports.quickBuild 	= series( sassTask, jsTask, cleanProdTask, copyTask, deployTask);
-//
-exports.default = function() { watch([ './assets/scss/*.scss' ], series(sassTask, bsTask))};
-// exports.default = series(sassTask, jsTask);
+/*
+	Updates .php and .css file on server on save
+*/
+exports.update   	= function() { watch([ './*.php', './assets/scss/*.scss', './assets/js/*.js' ], series(sassTask, jsTask, cleanProdTask, copyTask, deployTask)) };
+/**/
+exports.default 	= function() { watch([ './assets/scss/*.scss' ], series(sassTask, bsTask)) };
+// exports.default 	= series(sassTask, jsTask);
 
 
 
