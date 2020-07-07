@@ -120,6 +120,30 @@ function miniCopyTask() {
 		pipe(dest(dist));
 }
 
+//copyOnlyPhp == updatePhp export task
+function updateOnlyPhpFiles() {
+
+		const dist = paths.distprod;
+		const srcFiles = [ '*.php' ];
+
+		// Copy all folders and .php file
+		return src(srcFiles, { base: './'}).
+		pipe(plumber()).
+		pipe(dest(dist));
+}
+
+//copyOnlyPhp == updatePhp export task
+function updateOnlyFrontEndFiles() {
+
+		const dist = paths.distprod;
+		const srcFiles = [ 'js/**', '*.css', ];
+
+		// Copy all folders and .php file
+		return src(srcFiles, { base: './'}).
+		pipe(plumber()).
+		pipe(dest(dist));
+}
+
 //browserSync
 function bsTask() {
 	return browserSync.init( cfg.browserSyncOptions );
@@ -155,23 +179,27 @@ function deployTask() {
 
 
 /**/
-exports.bs 			= bsTask;
+exports.bs 				= bsTask;
 /**/
-exports.sass 		= sassTask;
+exports.sass 			= sassTask;
 /**/
-exports.images 		= imageTask;
+exports.images 			= imageTask;
 /**/
-exports.copy 		= copyTask;
+exports.copy 			= copyTask;
 /**/
-exports.deploy 		= deployTask;
+exports.deploy 			= deployTask;
 /**/
-exports.build 		= series( sassTask, jsTask, imageTask, cleanProdTask, copyTask, deployTask);
+exports.build 			= series( sassTask, jsTask, imageTask, cleanProdTask, copyTask, deployTask);
 /*
-	Updates .php and .css file on server on save
+	Updates .css & .js files on server
 */
-exports.update   	= function() { watch([ './*.php', './assets/scss/*.scss', './assets/js/*.js' ], series(sassTask, jsTask, cleanProdTask, copyTask, deployTask)) };
+exports.frontEndUpdate   	= function() { watch([ './assets/scss/*.scss', './assets/js/*.js' ], series(sassTask, jsTask, cleanProdTask, updateOnlyFrontEndFiles, deployTask)) };
+/*
+	Updates .php files on server 
+*/
+exports.updatePhp   	= function() { watch([ './*.php' ], series(cleanProdTask, updateOnlyPhpFiles, deployTask)) };
 /**/
-exports.default 	= function() { watch([ './assets/scss/*.scss' ], series(sassTask, bsTask)) };
+exports.default 		= function() { watch([ './assets/scss/*.scss' ], series(sassTask, bsTask)) };
 // exports.default 	= series(sassTask, jsTask);
 
 

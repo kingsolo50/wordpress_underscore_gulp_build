@@ -1,3 +1,4 @@
 /node_modules
 /.env
 /.gulpconfig.json
+/gulpconfig.json

@@ -5,19 +5,28 @@
 
 //CUSTOM FIELDS VARIABLES
 // $value = get_field( "text_field" );
-
-$homepage_title = get_field( 'home_page_title' );
-$homepage_slogan = get_field( 'home_page_slogan' );
-$card_1_title = get_field( 'card_1_title' );
-$card_1_image = get_field( 'card_1_image' );
-$card_1_text = get_field( 'card_1_text' );
-$card_2_title = get_field( 'card_2_title' );
-$card_2_image = get_field( 'card_2_image' );
-$card_2_text = get_field( 'card_2_text' );
-$card_3_title = get_field( 'card_3_title' );
-$card_3_image = get_field( 'card_3_image' );
-$card_3_text = get_field( 'card_3_text' );
+//
+$homepage_title       = get_field( 'home_page_title' );
+$homepage_slogan      = get_field( 'home_page_slogan' );
+//
+$card_1_title       = get_field( 'card_1_title' );
+$card_1_image       = get_field( 'card_1_image' );
+$card_1_text      = get_field( 'card_1_text' );
+//
+$card_2_title       = get_field( 'card_2_title' );
+$card_2_image       = get_field( 'card_2_image' );
+$card_2_text      = get_field( 'card_2_text' );
+//
+$card_3_title       = get_field( 'card_3_title' );
+$card_3_image       = get_field( 'card_3_image' );
+$card_3_text      = get_field( 'card_3_text' );
+//
 $program_and_events = get_field( 'program_and_events' );
+$program_and_events_1 = get_field( 'program_and_events_1' );
+$program_and_events_2 = get_field( 'program_and_events_2' );
+$program_and_events_3 = get_field( 'program_and_events_3' );
+$program_and_events_4 = get_field( 'program_and_events_4' );
+$program_and_events_5 = get_field( 'program_and_events_5' );
 $program_and_events_calender = get_field( 'program_and_events_calender' );
 
 get_header();
@@ -80,38 +89,29 @@ get_header();
     <div class="row">      
       <div class="col-12 mt-3">
         <div class="card-deck">
-          <!-- 
-            ABOUT US 
-          -->
-          <div class="card" style="border-radius: 0;">
+          <!-- ABOUT US  -->
+          <div class="card" style="border-radius: 0; border: 0;">
             <img src="<?php echo $card_1_image; ?>" class="pt-3 pl-3 pr-3 card-img-top rounded-circle" alt="...">
             <div class="card-body">
               <h5 class="card-title">
-                <p>
-                  <!-- 
-                    ACF ABOUT US TITLE 
-                  -->
-                  <?php echo $card_1_title; ?>
-                </p>
+                <?php echo $card_1_title; ?>
               </h5> 
-              <!-- 
-                ACF ABOUT US TEXT 
-              -->
               <p class="card-text"><?php echo $card_1_text; ?></p>             
             </div>            
           </div>
-          <!-- OUR VISION -->
-          <div class="card">
+          <!-- OUR VISION  -->
+          <div class="card text-center" style="border-radius: 0; border: 0;">
             <div class="card-body">
-              <h5 class="card-title"><?php echo $card_2_title; ?></h5>
+              <h5 class="card-title">Our God Is Able...</h5>
+              <p class="mb-0"><?php // echo $card_2_text; ?></p>
+              <!-- <img src="<?php echo $card_2_image; ?>" class="card-img-top img-fluid" alt="...">       -->
               <blockquote class="blockquote">
-                <p class="mb-0"><?php echo $card_2_text; ?></p>
-                <footer class="blockquote-footer">Our vision</footer>
-              </blockquote>                                    
+                <footer class="blockquote-footer">Slogan</footer>
+              </blockquote>
             </div>
           </div>
           <!-- OUR HISTORY -->
-          <div class="card">
+          <div class="card" style="border-radius: 0; border: 0;">
             <img src="<?php echo $card_3_image; ?>" class="card-img-top img-fluid" alt="...">
             <div class="card-body">
               <h5 class="card-title"><?php echo $card_3_title; ?></h5>
@@ -120,14 +120,68 @@ get_header();
           </div>
         </div>
       </div>
+      <!-- OUR MISSION -->
+      <div class="col-12">
+        <h4>Our Mission</h4>
+        <ul>
+          <ol>
+            To reach out and enlarge the body of Jesus Christ worldwide, all to the glory of God, and hence, celebrate God's presence in worship and magnify Him- <i>Psalm 34:4; 60:31.</i>
+          </ol>
+          <ol>
+            To communicate His Word through Evangelism - <i>Matthew 28:19-20; Mark 16:16.</i>
+          </ol>
+          <ol>
+            To reach and preach to the world, thereby, educating children of God through discipleship - <i>Luke 14:25-27, 33; Matthew 10:42.</i>
+          </ol>
+          <ol>
+            To make love the cardinal focus in the service of God and mankind - <i>Matthew 23:27-40.</i>
+          </ol>
+        </ul>
+      </div>
+      <!-- Program & Events -->
       <div class="col-12 mt-3">
         <h3>Program & Events</h3>
-        <div class="jumbotron">
-            <h1 class="display-4">Hello!</h1>
-            <p class="lead"><?php echo $program_and_events; ?></p>
-            <hr class="my-4">
-            <p><?php echo $program_and_events_calender; ?></p>
-            <a class="btn btn-primary btn-lg" href="#" role="button">See more...</a>
+        <div id="programSection">
+          <div class="jumbotron jumbotron-fluid">
+              <!-- <h1 class="display-4">Hello Solomon!</h1> -->
+              <!-- CAROUSEL   -->
+              <div id="program_and_events_carosuel" class="carousel slide p-5" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#program_and_events_carosuel" data-slide-to="0" class="active"></li>
+                  <li data-target="#program_and_events_carosuel" data-slide-to="1"></li>
+                  <li data-target="#program_and_events_carosuel" data-slide-to="2"></li>
+                  <li data-target="#program_and_events_carosuel" data-slide-to="3"></li>
+                  <li data-target="#program_and_events_carosuel" data-slide-to="4"></li>
+                  <li data-target="#program_and_events_carosuel" data-slide-to="5"></li>
+                </ol>
+                <div class="carousel-inner"> 
+                  <div class="carousel-item active">
+                    <img src="<?php echo $program_and_events_1; ?>" class="d-block w-100 img-fluid" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="<?php echo $program_and_events_2; ?>" class="d-block w-100 img-fluid" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="<?php echo $program_and_events_3; ?>" class="d-block w-100 img-fluid" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="<?php echo $program_and_events_4; ?>" class="d-block w-100 img-fluid" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="<?php echo $program_and_events_5; ?>" class="d-block w-100 img-fluid" alt="...">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#program_and_events_carosuel" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#program_and_events_carosuel" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+              <p class="lead"><?php echo $program_and_events; ?></p>          
+          </div>
         </div>
       </div>
       <div class="col-12 mt-3">
@@ -222,7 +276,6 @@ get_header();
         </address>
       </div>
     </div>
-
   </div>
 </div>
 	
